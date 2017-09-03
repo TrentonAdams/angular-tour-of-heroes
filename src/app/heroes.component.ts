@@ -4,8 +4,8 @@ import {Hero} from './hero';
 import {HeroService} from "./hero.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+  selector: 'my-heroes',
+  templateUrl: './heroes.component.html',
   /*  template: `
    <h1>{{title}}</h1>
    <h2>{{hero.name}} details!</h2>
@@ -14,10 +14,10 @@ import {HeroService} from "./hero.service";
    <label>name: </label>
    <input [(ngModel)]="hero.name" placeholder="name">
    </div>`,*/
-  styleUrls: ['./app.component.css'],
-  providers: [HeroService],
+  styleUrls: ['./heroes.component.css'],
+  providers: [],
 })
-export class AppComponent implements OnInit
+export class HeroesComponent implements OnInit
 {
   ngOnInit(): void
   {
@@ -28,7 +28,6 @@ export class AppComponent implements OnInit
   {
   }
 
-  title = 'Tour of Heroes';
   heroes: Hero[];
 
   selectedHero: Hero;
