@@ -10,6 +10,9 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
     AppComponent,
     HeroDetailComponent
   ],
+  exports: [
+    HeroDetailComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule
