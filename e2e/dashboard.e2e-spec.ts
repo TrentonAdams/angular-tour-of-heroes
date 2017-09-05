@@ -18,8 +18,13 @@ describe('angular-tour-of-heroes Dashboard', () =>
   {
     expect(dashboardLink).toBeTruthy("dashboard link should exist");
     dashboardLink.click();
+  });
+
+  it('should navigate to bombasto', () =>
+  {
     let bombasto = element(by.id('hero-13'));
     expect(bombasto).toBeTruthy('Bombasto should exist');
     bombasto.click();
   });
+
 });

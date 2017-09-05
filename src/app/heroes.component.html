@@ -3,7 +3,7 @@
 <ul class="heroes">
   <li *ngFor="let hero of heroes"
       (click)="onSelect(hero)"
-      [class.selected]="hero === selectedHero">
+      [class.selected]="hero === selectedHero" id="li-hero-{{hero.id}}">
     <span class="badge">{{hero.id}}</span> {{hero.name}}
   </li>
 </ul>
@@ -12,5 +12,5 @@
   <h2>
     {{selectedHero.name | uppercase}} is my hero
   </h2>
-  <button (click)="gotoDetail()">View Details</button>
+  <button id="details-hero-{{selectedHero.id}}" (click)="gotoDetail()">View Details</button>
 </div>
