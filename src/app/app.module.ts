@@ -10,6 +10,7 @@ import {HeroService} from "./hero.service";
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {AppRoutingModule} from "./app-routing/app-routing.module";
 import {HttpModule} from "@angular/http";
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {HttpModule} from "@angular/http";
     HeroesComponent,
     HeroDetailComponent,
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    WelcomeComponent
   ],
   exports: [
     HeroDetailComponent
