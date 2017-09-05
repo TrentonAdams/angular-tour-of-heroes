@@ -1,16 +1,21 @@
 import {browser, by, element} from "protractor";
 
-describe('angular-tour-of-heroes Dashboard', () => {
-
-  beforeEach(() => {
+describe('angular-tour-of-heroes Dashboard', () =>
+{
+  let dashboardLink;
+  beforeEach(() =>
+  {
+    dashboardLink = element(by.id('dashboard'));
   });
 
-  it('should display dashboard link', () => {
+  it('should display dashboard link', () =>
+  {
     browser.get('/');
-    expect(element(by.id('dashboard')).getText()).toEqual('Dashboard');
+    expect(dashboardLink.getText()).toEqual('Dashboard');
   });
-  it('should navigate to dashboard', () => {
-    let dashboardLink = element(by.id('dashboard'));
+
+  it('should navigate to dashboard', () =>
+  {
     expect(dashboardLink).toBeTruthy("dashboard link should exist");
     dashboardLink.click();
     let bombasto = element(by.id('hero-13'));
