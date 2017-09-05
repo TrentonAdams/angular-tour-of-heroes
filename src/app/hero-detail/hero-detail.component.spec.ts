@@ -1,25 +1,35 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { HeroDetailComponent } from './hero-detail.component';
+import {HeroDetailComponent} from './hero-detail.component';
+import {FormsModule} from "@angular/forms";
+import {HeroService} from "../hero.service";
+import {ActivatedRoute} from "@angular/router";
+import {Observable} from "rxjs/Observable";
 
-describe('HeroDetailComponent', () => {
+describe('HeroDetailComponent', () =>
+{
   let component: HeroDetailComponent;
   let fixture: ComponentFixture<HeroDetailComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async(() =>
+  {
     TestBed.configureTestingModule({
-      declarations: [ HeroDetailComponent ]
+      imports: [FormsModule],
+      declarations: [HeroDetailComponent],
+      providers: [HeroService, ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(() =>
+  {
     fixture = TestBed.createComponent(HeroDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should be created', () =>
+  {
     expect(component).toBeTruthy();
   });
 });
