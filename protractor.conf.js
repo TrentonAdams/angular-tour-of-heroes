@@ -10,9 +10,7 @@ exports.config = {
   ],
   multipleCapabilities: [{
     'browserName': 'chrome'
-  },{
-      'browserName': 'firefox'
-    }],
+  }],
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
