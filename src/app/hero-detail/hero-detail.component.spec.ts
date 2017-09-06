@@ -6,6 +6,7 @@ import {HeroService} from "../hero.service";
 import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {RouterTestingModule} from "@angular/router/testing";
+import {HttpModule} from "@angular/http";
 
 describe('HeroDetailComponent', () =>
 {
@@ -15,7 +16,7 @@ describe('HeroDetailComponent', () =>
   beforeEach(async(() =>
   {
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule],
+      imports: [FormsModule, RouterTestingModule, HttpModule],
       declarations: [HeroDetailComponent],
       providers: [HeroService, ]
     })

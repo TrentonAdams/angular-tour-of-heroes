@@ -11,6 +11,11 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {AppRoutingModule} from "./app-routing/app-routing.module";
 import {HttpModule} from "@angular/http";
 import { WelcomeComponent } from './welcome/welcome.component';
+import {InMemoryDataService} from "./in-memory-data.service";
+import {
+  InMemoryBackendConfigArgs,
+  InMemoryWebApiModule
+} from "angular-in-memory-web-api";
 
 
 @NgModule({
@@ -29,6 +34,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     FormsModule,
     AppRoutingModule,
     HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService,
+      <InMemoryBackendConfigArgs>{apiBase: 'api/'}),
   ],
   providers: [HeroService],
   bootstrap: [AppComponent]

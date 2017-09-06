@@ -2,6 +2,7 @@ import {TestBed, async} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HeroesComponent} from './heroes.component';
 import {HeroService} from "./hero.service";
+import {HttpModule} from "@angular/http";
 
 describe('HeroesComponent', () =>
 {
@@ -9,7 +10,7 @@ describe('HeroesComponent', () =>
   beforeEach(async(() =>
   {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, HttpModule],
       declarations: [
         HeroesComponent
       ],
