@@ -6,7 +6,10 @@ import {HeroService} from "../hero.service";
 import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {RouterTestingModule} from "@angular/router/testing";
-import {HttpModule} from "@angular/http";
+import {HttpModule, XHRBackend} from "@angular/http";
+import {MockBackend} from "@angular/http/testing";
+import {HttpClient} from "@angular/common/http";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('HeroDetailComponent', () =>
 {
@@ -16,11 +19,12 @@ describe('HeroDetailComponent', () =>
   beforeEach(async(() =>
   {
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule, HttpModule],
+      imports: [
+        FormsModule, RouterTestingModule, HttpModule, HttpClientTestingModule],
       declarations: [HeroDetailComponent],
-      providers: [HeroService, ]
-    })
-      .compileComponents();
+      providers: [
+        {provide: XHRBackend, useClass: MockBackend}, HeroService, HttpClient]
+    }).compileComponents();
   }));
 
   beforeEach(() =>

@@ -26,10 +26,15 @@ export class HeroDetailComponent implements OnInit
     this.route.paramMap
       .switchMap(
         (params: ParamMap) => this.heroService.getHero(+params.get('id')))
-      .subscribe(hero => this.hero = hero);
+      .subscribe(hero =>
+      {
+        this.hero = hero;
+        console.log('hero: ', this.hero)
+      });
   }
 
-  goBack(): void {
+  goBack(): void
+  {
     this.location.back();
   }
 

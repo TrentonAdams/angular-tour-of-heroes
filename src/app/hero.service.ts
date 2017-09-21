@@ -1,23 +1,25 @@
 import {Injectable}    from '@angular/core';
-import {Headers, Http} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Hero} from './hero'
+import {Observable} from "rxjs/Observable";
+import {HttpClient} from "@angular/common/http";
+import 'rxjs/add/operator/map'
 
 @Injectable()
 export class HeroService
 {
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = 'http://localhost:3000/api/heroes';
 
-  constructor(private http: Http)
+  constructor(private http: HttpClient)
   {
   }
 
-  getHeroes(): Promise<Hero[]>
+  getHeroes(): Observable<Hero[]>
   {
+    console.log('getHeros: ', this.heroesUrl);
+
     return this.http.get(this.heroesUrl)
-      .toPromise()
-      .then(response => response.json().data as Hero[])
-      .catch(this.handleError);
+      .map(response => response as Hero[]);
   }
 
   private handleError(error: any): Promise<any>
@@ -26,15 +28,17 @@ export class HeroService
     return Promise.reject(error.message || error);
   }
 
-  getHero(id: number): Promise<Hero>
+  getHero(id: number): Observable<Hero>
   {
     const url = `${this.heroesUrl}/${id}`;
-    console.log('angular log');
+    console.log('getHero: ', url);
 
     return this.http.get(this.heroesUrl)
-      .toPromise()
-      .then(response => response.json().data as Hero)
-      .catch(this.handleError);
+      .map(response =>
+      {
+        let hero = response as Hero;
+        console.log(hero);
+        return hero
+      })
   }
-
 }
