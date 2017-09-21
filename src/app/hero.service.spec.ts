@@ -6,9 +6,12 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
-import {HttpClient} from "@angular/common/http";
-import {Http, HttpModule, ResponseOptions, XHRBackend} from "@angular/http";
-import {MockBackend} from "@angular/http/testing";
+import {
+  Response, BaseRequestOptions, Http, HttpModule, ResponseOptions,
+  XHRBackend
+
+} from "@angular/http";
+import {MockBackend, MockConnection} from "@angular/http/testing";
 const heroesResponse = [
   {id: 0, name: 'Zero'},
   {id: 11, name: 'Mr. Nice'},
@@ -29,39 +32,87 @@ describe('HeroService', () =>
   beforeEach(() =>
   {
     TestBed.configureTestingModule({
-      imports: [HttpModule, HttpClientTestingModule],
       providers: [
-        {provide: XHRBackend, useClass: MockBackend},
-        HeroService, HttpClient]
+        BaseRequestOptions,
+        MockBackend,
+        HeroService,
+        {
+          deps: [MockBackend, BaseRequestOptions],
+          provide: Http,
+          useFactory: (backend: XHRBackend,
+            defaultOptions: BaseRequestOptions) =>
+          {
+            return new Http(backend, defaultOptions);
+          }
+        }]
     });
     //server = require('../../app')();
   });
 
-
-  afterEach(inject([HttpTestingController], (httpMock: HttpTestingController) =>
-  {
-  }));
 
   it('should be created', inject([HeroService], (service: HeroService) =>
   {
     expect(service).toBeTruthy();
   }));
 
-  it('heroes service responds',
-    inject([HeroService, XHRBackend],
+  it('heroes service.getHeroes()',
+    inject([HeroService, MockBackend],
       (heroService: HeroService, mockBackend) =>
       {
-        mockBackend.connections.subscribe((connection) =>
+        let tested = false;
+        mockBackend.connections.subscribe((connection: MockConnection) =>
         {
+          console.log('request: ', connection.request);
+          if (new RegExp('.+/api/heroes').test(connection.request.url))
+          {
+            connection.mockRespond((new Response(
+              new ResponseOptions(
+                {body: heroesResponse, status: 200}))));
+          }
         });
         heroService.getHeroes().subscribe(
-          data => expect(data[0]['name']).toEqual('Zero'));
+          data =>
+          {
+            tested = true;
+            console.log('data: ', data);
+            expect(data[0]['name']).toEqual('Zero');
+          });
+        expect(tested).toBeTruthy('the http test was not ran due to ' +
+          'incorrect testing code');
 
-        mockBackend.connections.subscribe((connection) =>
+      }));
+
+  it('heroes service.getHero(id: String)',
+    inject([HeroService, MockBackend],
+      (heroService: HeroService, mockBackend) =>
+      {
+        let tested = false;
+        mockBackend.connections.subscribe((connection: MockConnection) =>
         {
-          connection.mockRespond((new Response(
-            new ResponseOptions({body: JSON.stringify(heroesResponse)}))))
-        })
+          console.log('getHero(id): ', connection.request.url);
+          let heroRegex = new RegExp('.+\/api\/heroes\/(\\d*)');
+          if (heroRegex.test(connection.request.url))
+          {
+            console.log('regex: ', connection.request.url.match(heroRegex));
+            let id = Number(connection.request.url.match(heroRegex)[1]);
+            expect(id).toEqual(13);
+            connection.mockRespond((new Response(
+              new ResponseOptions(
+                {
+                  body: heroesResponse.find(row => row.id == id),
+                  status: 200
+                }))));
+          }
+        });
+        heroService.getHero(13).subscribe(
+          data =>
+          {
+            tested = true;
+            console.log('hero-data: ', data);
+            expect(data['name']).toEqual('Bombasto');
+          });
+        expect(tested).toBeTruthy('the http test was not ran due to ' +
+          'incorrect testing code');
       }));
 
   /*  it('/ redirects to /angular/index.html', function (done)

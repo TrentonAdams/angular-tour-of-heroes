@@ -2,15 +2,15 @@ import {Injectable}    from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import {Hero} from './hero'
 import {Observable} from "rxjs/Observable";
-import {HttpClient} from "@angular/common/http";
 import 'rxjs/add/operator/map'
+import {Http} from "@angular/http";
 
 @Injectable()
 export class HeroService
 {
   private heroesUrl = 'http://localhost:3000/api/heroes';
 
-  constructor(private http: HttpClient)
+  constructor(private http: Http)
   {
   }
 
@@ -19,7 +19,10 @@ export class HeroService
     console.log('getHeros: ', this.heroesUrl);
 
     return this.http.get(this.heroesUrl)
-      .map(response => response as Hero[]);
+      .map(response => {
+        console.log('response: ', response);
+        return response.json();
+      });
   }
 
   private handleError(error: any): Promise<any>
@@ -30,14 +33,14 @@ export class HeroService
 
   getHero(id: number): Observable<Hero>
   {
-    const url = `${this.heroesUrl}/${id}`;
+    let url = `${this.heroesUrl}/${id}`;
     console.log('getHero: ', url);
 
-    return this.http.get(this.heroesUrl)
+    return this.http.get(url)
       .map(response =>
       {
-        let hero = response as Hero;
-        console.log(hero);
+        let hero = response.json() as Hero;
+        console.log('hero:', hero);
         return hero
       })
   }
