@@ -2,7 +2,9 @@ import {TestBed, async} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HeroesComponent} from './heroes.component';
 import {HeroService} from "./hero.service";
-import {HttpModule} from "@angular/http";
+import {HttpModule, XHRBackend} from "@angular/http";
+import {MockBackend} from "@angular/http/testing";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('HeroesComponent', () =>
 {
@@ -10,11 +12,11 @@ describe('HeroesComponent', () =>
   beforeEach(async(() =>
   {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpModule],
+      imports: [RouterTestingModule, HttpModule, HttpClientTestingModule],
       declarations: [
         HeroesComponent
       ],
-      providers: [HeroService]
+      providers: [HeroService, { provide: XHRBackend, useClass: MockBackend }]
     }).compileComponents();
   }));
 

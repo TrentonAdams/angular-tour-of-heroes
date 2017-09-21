@@ -18,6 +18,7 @@ describe('angular-tour-of-heroes Heroes', () =>
   {
     expect(dashboardLink).toBeTruthy("heroes link should exist");
     dashboardLink.click();
+    expect(element(by.id('dashboard-hero'))).toBeTruthy();
     expect(element(by.id('li-hero-13'))).toBeTruthy('Bombasto should exist')
   });
 

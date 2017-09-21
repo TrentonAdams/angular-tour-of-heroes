@@ -16,7 +16,7 @@ import {Router} from "@angular/router";
    <input [(ngModel)]="hero.name" placeholder="name">
    </div>`,*/
   styleUrls: ['./heroes.component.css'],
-  providers: [],
+  providers: [HeroService],
 })
 export class HeroesComponent implements OnInit
 {
@@ -38,7 +38,6 @@ export class HeroesComponent implements OnInit
   {
     this.heroService.getHeroes().then(heroes => this.heroes = heroes);
   }
-
   onSelect(hero: Hero): void
   {
     this.selectedHero = hero;

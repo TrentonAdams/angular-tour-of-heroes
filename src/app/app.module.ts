@@ -9,13 +9,12 @@ import {HeroService} from "./hero.service";
 
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {AppRoutingModule} from "./app-routing/app-routing.module";
-import {HttpModule} from "@angular/http";
 import { WelcomeComponent } from './welcome/welcome.component';
-import {InMemoryDataService} from "./in-memory-data.service";
-import {
-  InMemoryBackendConfigArgs,
-  InMemoryWebApiModule
-} from "angular-in-memory-web-api";
+import {HttpClientModule} from "@angular/common/http";
+import {MockBackend} from "@angular/http/testing";
+import {stubHttpProvider} from "./stub-http/stub-http-provider";
+import {BaseRequestOptions, Http, HttpModule} from "@angular/http";
+import {Hero} from "./hero";
 
 
 @NgModule({
@@ -34,10 +33,8 @@ import {
     FormsModule,
     AppRoutingModule,
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService,
-      <InMemoryBackendConfigArgs>{apiBase: 'api/'}),
   ],
-  providers: [HeroService],
+  providers: [stubHttpProvider, MockBackend, BaseRequestOptions],
   bootstrap: [AppComponent]
 })
 export class AppModule
