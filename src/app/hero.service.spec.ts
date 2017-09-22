@@ -26,6 +26,39 @@ const heroesResponse = [
   {id: 20, name: 'Tornado'}
 ];
 
+/**
+ * Central place for handling expected request/responses.
+ * 
+ * @param mockBackend
+ */
+function setupMock(mockBackend)
+{
+  mockBackend.connections.subscribe((connection: MockConnection) =>
+  {
+    console.log('request: ', connection.request);
+    let heroRegex = new RegExp('.+\/api\/heroes\/(\\d*)');
+
+    if (heroRegex.test(connection.request.url))
+    {
+      console.log('regex: ', connection.request.url.match(heroRegex));
+      let id = Number(connection.request.url.match(heroRegex)[1]);
+      expect(id).toEqual(13);
+      connection.mockRespond((new Response(
+        new ResponseOptions(
+          {
+            body: heroesResponse.find(row => row.id == id),
+            status: 200
+          }))));
+    }
+    else if (new RegExp('.+/api/heroes').test(connection.request.url))
+    {
+      connection.mockRespond((new Response(
+        new ResponseOptions(
+          {body: heroesResponse, status: 200}))));
+    }
+
+  });
+}
 describe('HeroService', () =>
 {
   //let server;
@@ -55,27 +88,30 @@ describe('HeroService', () =>
     expect(service).toBeTruthy();
   }));
 
-  it('heroes service.getHeroes()',
+  it('service.getHeroes() should return heroes',
     inject([HeroService, MockBackend],
       (heroService: HeroService, mockBackend) =>
       {
         let tested = false;
-        mockBackend.connections.subscribe((connection: MockConnection) =>
-        {
-          console.log('request: ', connection.request);
-          if (new RegExp('.+/api/heroes').test(connection.request.url))
-          {
-            connection.mockRespond((new Response(
-              new ResponseOptions(
-                {body: heroesResponse, status: 200}))));
-          }
-        });
+        setupMock(mockBackend);
         heroService.getHeroes().subscribe(
           data =>
           {
             tested = true;
             console.log('data: ', data);
-            expect(data[0]['name']).toEqual('Zero');
+            let count = 0;
+            expect(data.length).toEqual(11);
+            expect(data[count++]['name']).toEqual('Zero');
+            expect(data[count++]['name']).toEqual('Mr. Nice');
+            expect(data[count++]['name']).toEqual('Narco');
+            expect(data[count++]['name']).toEqual('Bombasto');
+            expect(data[count++]['name']).toEqual('Celeritas');
+            expect(data[count++]['name']).toEqual('Magneta');
+            expect(data[count++]['name']).toEqual('RubberMan');
+            expect(data[count++]['name']).toEqual('Dynama');
+            expect(data[count++]['name']).toEqual('Dr IQ');
+            expect(data[count++]['name']).toEqual('Magma');
+            expect(data[count++]['name']).toEqual('Tornado');
           });
         expect(tested).toBeTruthy('the http test was not ran due to ' +
           'incorrect testing code');
@@ -87,23 +123,7 @@ describe('HeroService', () =>
       (heroService: HeroService, mockBackend) =>
       {
         let tested = false;
-        mockBackend.connections.subscribe((connection: MockConnection) =>
-        {
-          console.log('getHero(id): ', connection.request.url);
-          let heroRegex = new RegExp('.+\/api\/heroes\/(\\d*)');
-          if (heroRegex.test(connection.request.url))
-          {
-            console.log('regex: ', connection.request.url.match(heroRegex));
-            let id = Number(connection.request.url.match(heroRegex)[1]);
-            expect(id).toEqual(13);
-            connection.mockRespond((new Response(
-              new ResponseOptions(
-                {
-                  body: heroesResponse.find(row => row.id == id),
-                  status: 200
-                }))));
-          }
-        });
+        setupMock(mockBackend);
         heroService.getHero(13).subscribe(
           data =>
           {
